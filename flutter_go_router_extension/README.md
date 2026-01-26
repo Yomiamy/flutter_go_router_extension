@@ -79,4 +79,4 @@ MIT License
 
 ## References
 
-- [go_router_pop_until_example](https://github.com/rubenlop88/go_router_pop_until_example)
+- [go_router_pop_until_example]()
