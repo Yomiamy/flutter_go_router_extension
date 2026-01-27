@@ -10,7 +10,7 @@ void main() {
     router = GoRouter(
       initialLocation: '/home',
       routes: [
-        GoRoute(path: '/home', builder: (_, __) => const TestPage('home')),
+        GoRoute(path: '/home', builder: (_, _) => const TestPage('home')),
         GoRoute(
           path: '/user/:id',
           builder: (_, state) => TestPage('user-${state.pathParameters['id']}'),
@@ -19,7 +19,7 @@ void main() {
           path: '/user/:id/posts',
           builder: (_, state) => TestPage('posts-${state.pathParameters['id']}'),
         ),
-        GoRoute(path: '/comments', builder: (_, __) => const TestPage('comments')),
+        GoRoute(path: '/comments', builder: (_, _) => const TestPage('comments')),
       ],
     );
 
