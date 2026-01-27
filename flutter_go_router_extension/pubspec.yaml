@@ -1,7 +1,7 @@
 name: flutter_go_router_extension
-description: "A new Flutter package project."
-version: 0.0.1
-homepage:
+description: "A helpful extension for Go Router that simplifies route setup and management in Flutter applications. This package provides utilities to reduce boilerplate and improve readability of your routing code."
+version: 1.0.0
+homepage: https://github.com/Yomiamy/flutter_go_router_extension
 
 environment:
   sdk: ^3.10.1
