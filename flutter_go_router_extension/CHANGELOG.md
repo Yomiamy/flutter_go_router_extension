@@ -1,3 +1,7 @@
+## 1.0.1
+
+* Fixed visual flickering when navigating with `pushWithSetNewRoutePath` by reimplementing it using `routeInformationProvider` and improving stack management.
+
 ## 1.0.0
 
 * Initial release.
