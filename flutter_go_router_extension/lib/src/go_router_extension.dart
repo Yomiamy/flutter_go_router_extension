@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 extension ContextExtension on BuildContext {
-  static const navigationDelayInMills = 200;
-
   /// Converts a specific URL path format to a Regex for comparison.
   String pathToRegexPattern({required String urlPath}) {
     if (urlPath.isEmpty) urlPath = '/';
@@ -40,8 +38,8 @@ extension ContextExtension on BuildContext {
   /// *Reference*
   /// https://github.com/rubenlop88/go_router_pop_until_example/blob/main/lib/routes.dart
   Future<void> pushWithSetNewRoutePath(String redirectUrl) async {
-    final delegate = GoRouter.of(this).routerDelegate;
-    var config = delegate.currentConfiguration;
+    final router = GoRouter.of(this);
+    var config = router.routerDelegate.currentConfiguration;
     var routes = config.routes.whereType<GoRoute>();
     final redirectUrlPath = Uri.parse(redirectUrl).path;
 
@@ -60,21 +58,15 @@ extension ContextExtension on BuildContext {
       routes = config.routes.whereType<GoRoute>();
     }
 
-    if (config.isNotEmpty) {
-      // GoRoute does not allow setNewRoutePath with an empty config.
-      await delegate.setNewRoutePath(config);
-      await Future.delayed(Duration(milliseconds: navigationDelayInMills));
-
-      if (!mounted) return;
-      await push(redirectUrl);
+    if (config.isEmpty) {
+      // Stack is empty, use go() to completely reset and rebuild the route list.
+      go(redirectUrl);
       return;
     }
 
-    // At this point, pushing a page to achieve the clear_top effect might encounter
-    // a situation where the config (i.e., the Route List) is empty, but the redirectUrl
-    // is still in the widget tree and has not been removed. This can cause a state
-    // inconsistency error, so go() must be used to completely reset the route and
-    // rebuild the Route List.
-    go(redirectUrl);
+    // Use routeInformationProvider.push with the trimmed config as base.
+    // This performs "set base stack + push new route" in a single operation,
+    // eliminating any intermediate state flicker.
+    await router.routeInformationProvider.push(redirectUrl, base: config);
   }
 }
