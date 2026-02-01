@@ -2,7 +2,7 @@ name: example
 description: "Example app demonstrating flutter_go_router_extension usage."
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.2+1
 
 environment:
   sdk: ^3.10.1

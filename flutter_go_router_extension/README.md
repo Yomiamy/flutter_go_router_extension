@@ -14,7 +14,7 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_go_router_extension: ^1.0.1
+  flutter_go_router_extension: ^1.0.2
 ```
 
 ## Usage
