@@ -69,4 +69,27 @@ extension ContextExtension on BuildContext {
     // eliminating any intermediate state flicker.
     await router.routeInformationProvider.push(redirectUrl, base: config);
   }
+
+  /// [popToRoot]
+  /// Pops all routes until only the root route remains.
+  ///
+  /// This function simulates a "pop to root" behavior by trimming the navigation stack
+  /// down to the first [GoRoute] and then updating the router configuration.
+  Future<void> popToRoot() async {
+    final router = GoRouter.of(this);
+    var config = router.routerDelegate.currentConfiguration;
+    var routes = config.routes.whereType<GoRoute>();
+
+    // If there is 1 or fewer GoRoutes, we are already at the root.
+    if (routes.length <= 1) return;
+
+    // Remove routes from the end until only 1 remains.
+    while (routes.length > 1) {
+      config = config.remove(config.last);
+      routes = config.routes.whereType<GoRoute>();
+    }
+
+    // Update the route path with the new configuration.
+    await router.routerDelegate.setNewRoutePath(config);
+  }
 }

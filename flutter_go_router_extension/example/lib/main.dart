@@ -108,7 +108,9 @@ class NavigationStackDisplay extends StatelessWidget {
                     Text(
                       route.path,
                       style: TextStyle(
-                        fontWeight: isLast ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: isLast
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                         color: isLast ? Colors.deepPurple : Colors.black87,
                       ),
                     ),
@@ -154,10 +156,7 @@ class DemoScaffold extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const NavigationStackDisplay(),
-            ...children,
-          ],
+          children: [const NavigationStackDisplay(), ...children],
         ),
       ),
     );
@@ -360,6 +359,13 @@ class CommentsPage extends StatelessWidget {
           onPressed: () => context.pushWithSetNewRoutePath('/home'),
           color: Colors.red.shade700,
         ),
+        const SizedBox(height: 16),
+        NavButton(
+          label: 'popToRoot()',
+          description: 'Pops all routes until only the root remains',
+          onPressed: () => context.popToRoot(),
+          color: Colors.redAccent,
+        ),
         const Divider(),
         const Padding(
           padding: EdgeInsets.all(16),
@@ -416,6 +422,13 @@ class SettingsPage extends StatelessWidget {
               'If /user/:id exists in stack, clears above it and pushes /user/456',
           onPressed: () => context.pushWithSetNewRoutePath('/user/456'),
           color: Colors.red.shade700,
+        ),
+        const SizedBox(height: 16),
+        NavButton(
+          label: 'popToRoot()',
+          description: 'Pops all routes until only the root remains',
+          onPressed: () => context.popToRoot(),
+          color: Colors.redAccent,
         ),
         const Divider(),
         const Padding(
