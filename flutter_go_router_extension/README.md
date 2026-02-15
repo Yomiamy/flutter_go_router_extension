@@ -5,6 +5,7 @@ A Flutter package that extends [go_router](https://pub.dev/packages/go_router) w
 ## Features
 
 - **`pushWithSetNewRoutePath`**: Simulates Android's `FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK` behavior
+- **`popToRoot`**: Pop all routes until the root route is reached.
 - Supports dynamic route parameters (e.g., `/user/:id`)
 - Supports wildcard routes (e.g., `/files/*`)
 
@@ -14,10 +15,24 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_go_router_extension: ^1.0.2
+  flutter_go_router_extension: ^1.1.0
 ```
 
 ## Usage
+
+### popToRoot
+
+Pops all routes from the navigator stack until the root route (`/`) is reached.
+
+```dart
+// In your widget
+ElevatedButton(
+  onPressed: () {
+    context.popToRoot();
+  },
+  child: Text('Pop to Root'),
+)
+```
 
 ### pushWithSetNewRoutePath
 
