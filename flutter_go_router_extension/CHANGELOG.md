@@ -1,3 +1,7 @@
+## 1.1.0
+
+* Added `popToRoot` method to pop all routes until the root route is reached.
+
 ## 1.0.2
 
 * Version bump to 1.0.2.
