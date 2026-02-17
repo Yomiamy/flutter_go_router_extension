@@ -221,9 +221,9 @@ class HomePage extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.all(16),
           child: Text(
-            'Welcome! This demo shows how pushAndRemoveUntil works.\n\n'
-            'Build up a navigation stack by navigating through pages, '
-            'then use pushAndRemoveUntil to clear the stack back to a specific page.',
+            'Welcome! This demo shows how pushAndRemoveUntil and popUntil work.\n\n'
+            'pushAndRemoveUntil: clears stack to a route and pushes a NEW instance.\n'
+            'popUntil: pops stack to a route and PRESERVES the existing instance.',
             style: TextStyle(fontSize: 14),
           ),
         ),
@@ -361,6 +361,14 @@ class CommentsPage extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         NavButton(
+          label: 'popUntil(\'/user/123\')',
+          description:
+              'Pops stack to /user/:id, preserving its existing instance',
+          onPressed: () => context.popUntil('/user/123'),
+          color: Colors.indigo,
+        ),
+        const SizedBox(height: 16),
+        NavButton(
           label: 'popToRoot()',
           description: 'Pops all routes until only the root remains',
           onPressed: () => context.popToRoot(),
@@ -422,6 +430,13 @@ class SettingsPage extends StatelessWidget {
               'If /user/:id exists in stack, clears above it and pushes /user/456',
           onPressed: () => context.pushAndRemoveUntil('/user/456'),
           color: Colors.red.shade700,
+        ),
+        const SizedBox(height: 16),
+        NavButton(
+          label: 'popUntil(\'/home\')',
+          description: 'Pops stack back to /home, preserving its existing instance',
+          onPressed: () => context.popUntil('/home'),
+          color: Colors.indigo,
         ),
         const SizedBox(height: 16),
         NavButton(
