@@ -1,3 +1,7 @@
+## 1.2.0
+
+* Added `popUntil` method to pop routes until a matching route is reached, preserving the existing route instance.
+
 ## 1.1.0
 
 * Added `popToRoot` method to pop all routes until the root route is reached.
