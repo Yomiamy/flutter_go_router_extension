@@ -64,7 +64,7 @@ void main() {
 
     final context = tester.element(find.byType(TestPage));
 
-    // 建立堆疊：/home → /user/123 → /user/123/posts → /comments
+    // Build stack: /home → /user/123 → /user/123/posts → /comments
     context.push('/user/123');
     await tester.pumpAndSettle();
 
@@ -76,16 +76,16 @@ void main() {
 
     expect(find.text('comments'), findsOneWidget);
 
-    // 呼叫 popUntil，目標為 /user/123
+    // Call popUntil targeting /user/123
     await context.popUntil('/user/123');
     await tester.pumpAndSettle();
 
-    // 驗證：回到 /user/123，且上面的頁面已移除
+    // Verify: back at /user/123 with pages above it removed
     expect(find.text('user-123'), findsOneWidget);
     expect(find.text('posts-123'), findsNothing);
     expect(find.text('comments'), findsNothing);
 
-    // 驗證：堆疊頂端為 /user/:id（原實體，非新推入）
+    // Verify: top of stack is /user/:id (existing instance, not a new push)
     expect(
       router.routerDelegate.currentConfiguration.last.route.path,
       '/user/:id',
@@ -101,17 +101,17 @@ void main() {
     context.push('/user/123');
     await tester.pumpAndSettle();
 
-    // /settings 不在堆疊中，不應改變堆疊
+    // /settings is not in the stack — the stack should remain unchanged
     await context.popUntil('/settings');
     await tester.pumpAndSettle();
 
-    // 堆疊應維持不變
+    // Stack should be unmodified
     expect(find.text('user-123'), findsOneWidget);
     expect(
       router.routerDelegate.currentConfiguration.last.route.path,
       '/user/:id',
     );
-    // 堆疊深度不應改變（/home + /user/123 = 2）
+    // Stack depth should not change (/home + /user/123 = 2)
     expect(
       router.routerDelegate.currentConfiguration.routes
           .whereType<GoRoute>().length,
@@ -128,7 +128,7 @@ void main() {
     context.push('/user/123');
     await tester.pumpAndSettle();
 
-    // 已在 /user/123，不應改變堆疊
+    // Already at /user/123 — the stack should remain unchanged
     await context.popUntil('/user/123');
     await tester.pumpAndSettle();
 
@@ -137,7 +137,7 @@ void main() {
       router.routerDelegate.currentConfiguration.last.route.path,
       '/user/:id',
     );
-    // 堆疊深度不應改變（/home + /user/123 = 2）
+    // Stack depth should not change (/home + /user/123 = 2)
     expect(
       router.routerDelegate.currentConfiguration.routes
           .whereType<GoRoute>().length,
@@ -151,7 +151,7 @@ void main() {
 
     final context = tester.element(find.byType(TestPage));
 
-    // 建立堆疊：/home → /user/123 → /comments
+    // Build stack: /home → /user/123 → /comments
     context.push('/user/123');
     await tester.pumpAndSettle();
 
@@ -160,7 +160,7 @@ void main() {
 
     expect(find.text('comments'), findsOneWidget);
 
-    // 呼叫 popUntil('/home')，應 pop 回 root
+    // Call popUntil('/home') — should pop back to root
     await context.popUntil('/home');
     await tester.pumpAndSettle();
 

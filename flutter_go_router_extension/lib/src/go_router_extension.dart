@@ -127,17 +127,17 @@ extension ContextExtension on BuildContext {
     var routes = config.routes.whereType<GoRoute>();
     final targetPath = Uri.parse(targetUrl).path;
 
-    // 記錄起始 routes 數量，用於判斷是否有找到匹配
+    // Record the initial route count to detect whether the stack changed.
     final initialLength = routes.length;
 
-    // 從頂端開始移除，直到找到匹配或只剩一個
+    // Remove routes from the top until a match is found or only one remains.
     while (routes.length > 1) {
       final lastRoute = config.last.route;
       final lastPath = lastRoute.path;
       final reg = RegExp(pathToRegexPattern(urlPath: lastPath));
 
       if (reg.hasMatch(targetPath)) {
-        // 找到匹配：保留此路由（不移除），直接套用
+        // Match found: keep this route in place and stop removing.
         break;
       }
 
@@ -145,7 +145,7 @@ extension ContextExtension on BuildContext {
       routes = config.routes.whereType<GoRoute>();
     }
 
-    // 若最後一個也不匹配（目標不在堆疊中），不做任何事
+    // If the last remaining route still doesn't match, the target is not in the stack — do nothing.
     final lastRoute = config.last.route;
     final lastPath = lastRoute.path;
     final reg = RegExp(pathToRegexPattern(urlPath: lastPath));
@@ -153,12 +153,12 @@ extension ContextExtension on BuildContext {
       return;
     }
 
-    // 若堆疊沒有變動（已在目標頁面），不做任何事
+    // If the stack is unchanged (already at the target), do nothing.
     if (routes.length == initialLength) {
       return;
     }
 
-    // 套用裁剪後的堆疊，保留匹配路由的原有實體
+    // Apply the trimmed stack, preserving the existing instance of the matching route.
     await router.routerDelegate.setNewRoutePath(config);
   }
 }
