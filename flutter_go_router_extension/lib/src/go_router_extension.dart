@@ -12,7 +12,7 @@ extension ContextExtension on BuildContext {
     return '^$r\$';
   }
 
-  /// [pushWithSetNewRoutePath]
+  /// [pushAndRemoveUntil]
   /// Simulates the behavior of Android's `FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK`.
   ///
   /// #### Function Description
@@ -24,7 +24,7 @@ extension ContextExtension on BuildContext {
   ///   /home -> /user/123 -> /user/123/posts -> /comments
   ///
   /// And you call:
-  ///   pushWithSetNewRoutePath('/user/123')
+  ///   pushAndRemoveUntil('/user/123')
   ///
   /// Processing steps:
   ///   The route definition /user/:id is converted to RegExp: ^/user/[^/]+$
@@ -37,7 +37,7 @@ extension ContextExtension on BuildContext {
   ///
   /// *Reference*
   /// https://github.com/rubenlop88/go_router_pop_until_example/blob/main/lib/routes.dart
-  Future<void> pushWithSetNewRoutePath(String redirectUrl) async {
+  Future<void> pushAndRemoveUntil(String redirectUrl) async {
     final router = GoRouter.of(this);
     var config = router.routerDelegate.currentConfiguration;
     var routes = config.routes.whereType<GoRoute>();

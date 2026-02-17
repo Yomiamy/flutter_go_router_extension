@@ -26,7 +26,7 @@ void main() {
     return MaterialApp.router(routerConfig: router);
   }
 
-  testWidgets('pushWithSetNewRoutePath clears stack and pushes new route', (tester) async {
+  testWidgets('pushAndRemoveUntil clears stack and pushes new route', (tester) async {
     await tester.pumpWidget(createApp());
     await tester.pumpAndSettle();
 
@@ -45,7 +45,7 @@ void main() {
     expect(find.text('comments'), findsOneWidget);
 
     // Execute target method
-    await context.pushWithSetNewRoutePath('/user/123');
+    await context.pushAndRemoveUntil('/user/123');
     await tester.pumpAndSettle();
 
     // Verify the result

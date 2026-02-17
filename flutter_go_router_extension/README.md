@@ -4,7 +4,7 @@ A Flutter package that extends [go_router](https://pub.dev/packages/go_router) w
 
 ## Features
 
-- **`pushWithSetNewRoutePath`**: Simulates Android's `FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK` behavior
+- **`pushAndRemoveUntil`**: Simulates Android's `FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK` behavior
 - **`popToRoot`**: Pop all routes until the root route is reached.
 - Supports dynamic route parameters (e.g., `/user/:id`)
 - Supports wildcard routes (e.g., `/files/*`)
@@ -34,7 +34,7 @@ ElevatedButton(
 )
 ```
 
-### pushWithSetNewRoutePath
+### pushAndRemoveUntil
 
 When navigating to a page that already exists in the stack, it clears all pages above and including that page, then pushes a new instance of the target page.
 
@@ -44,7 +44,7 @@ import 'package:flutter_go_router_extension/flutter_go_router_extension.dart';
 // In your widget
 ElevatedButton(
   onPressed: () {
-    context.pushWithSetNewRoutePath('/user/123');
+    context.pushAndRemoveUntil('/user/123');
   },
   child: Text('Go to User'),
 )
@@ -61,7 +61,7 @@ If the original stack is:
 And you call:
 
 ```dart
-context.pushWithSetNewRoutePath('/user/123');
+context.pushAndRemoveUntil('/user/123');
 ```
 
 Processing steps:
