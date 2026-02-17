@@ -12,7 +12,7 @@ extension ContextExtension on BuildContext {
     return '^$r\$';
   }
 
-  /// [pushWithSetNewRoutePath]
+  /// [pushAndRemoveUntil]
   /// Simulates the behavior of Android's `FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK`.
   ///
   /// #### Function Description
@@ -24,7 +24,7 @@ extension ContextExtension on BuildContext {
   ///   /home -> /user/123 -> /user/123/posts -> /comments
   ///
   /// And you call:
-  ///   pushWithSetNewRoutePath('/user/123')
+  ///   pushAndRemoveUntil('/user/123')
   ///
   /// Processing steps:
   ///   The route definition /user/:id is converted to RegExp: ^/user/[^/]+$
@@ -37,7 +37,7 @@ extension ContextExtension on BuildContext {
   ///
   /// *Reference*
   /// https://github.com/rubenlop88/go_router_pop_until_example/blob/main/lib/routes.dart
-  Future<void> pushWithSetNewRoutePath(String redirectUrl) async {
+  Future<void> pushAndRemoveUntil(String redirectUrl) async {
     final router = GoRouter.of(this);
     var config = router.routerDelegate.currentConfiguration;
     var routes = config.routes.whereType<GoRoute>();
@@ -90,6 +90,75 @@ extension ContextExtension on BuildContext {
     }
 
     // Update the route path with the new configuration.
+    await router.routerDelegate.setNewRoutePath(config);
+  }
+
+  /// [popUntil]
+  /// Pops routes from the navigation stack until a route matching [targetUrl] is found.
+  ///
+  /// Unlike [pushAndRemoveUntil], this method **preserves** the existing instance
+  /// of the matching route (its state, scroll position, etc. are retained).
+  ///
+  /// #### Function Description
+  ///
+  /// Traverses the navigation stack from the top, removing routes that do not match
+  /// [targetUrl]. When a match is found, the stack is trimmed to include that route
+  /// (as the top), and [setNewRoutePath] is called to apply the change.
+  ///
+  /// If [targetUrl] is not found in the stack, the method does nothing.
+  ///
+  /// For example, if the original stack is:
+  ///   /home -> /user/123 -> /user/123/posts -> /comments
+  ///
+  /// And you call:
+  ///   popUntil('/user/123')
+  ///
+  /// Processing steps:
+  ///   The route definition /user/:id is converted to RegExp: ^/user/[^/]+$
+  ///   Check /comments       ❌ No match, remove
+  ///   Check /user/123/posts ❌ No match, remove
+  ///   Check /user/123       ✅ Match, stop here
+  ///
+  /// Resulting stack:
+  ///   /home -> /user/123 (original instance preserved)
+  Future<void> popUntil(String targetUrl) async {
+    final router = GoRouter.of(this);
+    var config = router.routerDelegate.currentConfiguration;
+    var routes = config.routes.whereType<GoRoute>();
+    final targetPath = Uri.parse(targetUrl).path;
+
+    // Record the initial route count to detect whether the stack changed.
+    final initialLength = routes.length;
+
+    // Remove routes from the top until a match is found or only one remains.
+    while (routes.length > 1) {
+      final lastRoute = config.last.route;
+      final lastPath = lastRoute.path;
+      final reg = RegExp(pathToRegexPattern(urlPath: lastPath));
+
+      if (reg.hasMatch(targetPath)) {
+        // Match found: keep this route in place and stop removing.
+        break;
+      }
+
+      config = config.remove(config.last);
+      routes = config.routes.whereType<GoRoute>();
+    }
+
+    // If the last remaining route still doesn't match, the target is not in the stack — do nothing.
+    final lastRoute = config.last.route;
+    final lastPath = lastRoute.path;
+    final reg = RegExp(pathToRegexPattern(urlPath: lastPath));
+    if (!reg.hasMatch(targetPath)) {
+      return;
+    }
+
+    // If the stack is unchanged (already at the target), do nothing.
+    if (routes.length == initialLength) {
+      return;
+    }
+
+    // Apply the trimmed stack, preserving the existing instance of the matching route.
     await router.routerDelegate.setNewRoutePath(config);
   }
 }
