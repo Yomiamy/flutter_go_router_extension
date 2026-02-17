@@ -92,4 +92,73 @@ extension ContextExtension on BuildContext {
     // Update the route path with the new configuration.
     await router.routerDelegate.setNewRoutePath(config);
   }
+
+  /// [popUntil]
+  /// Pops routes from the navigation stack until a route matching [targetUrl] is found.
+  ///
+  /// Unlike [pushAndRemoveUntil], this method **preserves** the existing instance
+  /// of the matching route (its state, scroll position, etc. are retained).
+  ///
+  /// #### Function Description
+  ///
+  /// Traverses the navigation stack from the top, removing routes that do not match
+  /// [targetUrl]. When a match is found, the stack is trimmed to include that route
+  /// (as the top), and [setNewRoutePath] is called to apply the change.
+  ///
+  /// If [targetUrl] is not found in the stack, the method does nothing.
+  ///
+  /// For example, if the original stack is:
+  ///   /home -> /user/123 -> /user/123/posts -> /comments
+  ///
+  /// And you call:
+  ///   popUntil('/user/123')
+  ///
+  /// Processing steps:
+  ///   The route definition /user/:id is converted to RegExp: ^/user/[^/]+$
+  ///   Check /comments       ❌ No match, remove
+  ///   Check /user/123/posts ❌ No match, remove
+  ///   Check /user/123       ✅ Match, stop here
+  ///
+  /// Resulting stack:
+  ///   /home -> /user/123 (original instance preserved)
+  Future<void> popUntil(String targetUrl) async {
+    final router = GoRouter.of(this);
+    var config = router.routerDelegate.currentConfiguration;
+    var routes = config.routes.whereType<GoRoute>();
+    final targetPath = Uri.parse(targetUrl).path;
+
+    // 記錄起始 routes 數量，用於判斷是否有找到匹配
+    final initialLength = routes.length;
+
+    // 從頂端開始移除，直到找到匹配或只剩一個
+    while (routes.length > 1) {
+      final lastRoute = config.last.route;
+      final lastPath = lastRoute.path;
+      final reg = RegExp(pathToRegexPattern(urlPath: lastPath));
+
+      if (reg.hasMatch(targetPath)) {
+        // 找到匹配：保留此路由（不移除），直接套用
+        break;
+      }
+
+      config = config.remove(config.last);
+      routes = config.routes.whereType<GoRoute>();
+    }
+
+    // 若最後一個也不匹配（目標不在堆疊中），不做任何事
+    final lastRoute = config.last.route;
+    final lastPath = lastRoute.path;
+    final reg = RegExp(pathToRegexPattern(urlPath: lastPath));
+    if (!reg.hasMatch(targetPath)) {
+      return;
+    }
+
+    // 若堆疊沒有變動（已在目標頁面），不做任何事
+    if (routes.length == initialLength) {
+      return;
+    }
+
+    // 套用裁剪後的堆疊，保留匹配路由的原有實體
+    await router.routerDelegate.setNewRoutePath(config);
+  }
 }
