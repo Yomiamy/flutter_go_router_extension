@@ -17,7 +17,7 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_go_router_extension: ^1.3.0
+  flutter_go_router_extension: ^1.3.1
 ```
 
 ## Usage
@@ -130,7 +130,7 @@ Resulting stack:
 
 ## License
 
-MIT License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## References
 
