@@ -1,3 +1,7 @@
+## 1.3.1
+
+* Updated License section in README.md to conform to standard open-source references.
+
 ## 1.3.0
 
 * Added `isCurrent` property to strictly check whether the current `BuildContext` belongs to the top-most route in the navigation stack.
