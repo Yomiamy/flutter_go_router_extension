@@ -1,3 +1,7 @@
+## 1.3.0
+
+* Added `isCurrent` property to strictly check whether the current `BuildContext` belongs to the top-most route in the navigation stack.
+
 ## 1.2.0
 
 * Added `popUntil` method to pop routes until a matching route is reached, preserving the existing route instance.

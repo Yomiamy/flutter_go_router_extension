@@ -4,6 +4,7 @@ A Flutter package that extends [go_router](https://pub.dev/packages/go_router) w
 
 ## Features
 
+- **`isCurrent`**: Returns true if the current `BuildContext` belongs to the top-most route in the navigation stack.
 - **`pushAndRemoveUntil`**: Simulates Android's `FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK` behavior
 - **`popUntil`**: Pop routes until a specific route is reached, preserving the existing instance
 - **`popToRoot`**: Pop all routes until the root route is reached.
@@ -16,10 +17,21 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_go_router_extension: ^1.2.0
+  flutter_go_router_extension: ^1.3.0
 ```
 
 ## Usage
+
+### isCurrent
+
+Returns true if the current `BuildContext` belongs to the top-most route in the navigation stack.
+
+```dart
+// In your widget
+if (context.isCurrent) {
+  // Do something only if this is the active screen
+}
+```
 
 ### popToRoot
 
