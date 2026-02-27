@@ -12,7 +12,16 @@ extension ContextExtension on BuildContext {
     return '^$r\$';
   }
 
-  /// [pushAndRemoveUntil]
+  /// [isCurrent]
+  /// Returns true if the current [BuildContext] belongs to the top-most route in the navigation stack.
+  bool get isCurrent {
+    final currentPageKey = GoRouterState.of(this).pageKey;
+    final topPageKey =
+        GoRouter.of(this).routerDelegate.currentConfiguration.last.pageKey;
+    return currentPageKey == topPageKey;
+  }
+
+  /// [pushAndRemoveUnt`il]
   /// Simulates the behavior of Android's `FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK`.
   ///
   /// #### Function Description
