@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_go_router_extension/flutter_go_router_extension.dart';
 
 /// Displays the current navigation stack
 class NavigationStackDisplay extends StatelessWidget {
@@ -34,7 +35,12 @@ class NavigationStackDisplay extends StatelessWidget {
             ...routes.asMap().entries.map((entry) {
               final index = entry.key;
               final route = entry.value;
-              final isLast = index == routes.length - 1;
+              // To ensure only the ACTUAL foreground route gets the string,
+              // we must ensure this array element is the top of the stack
+              // AND the component itself is currently the topmost context.
+              final isTopLayer = index == routes.length - 1;
+              final showCurrent = isTopLayer && context.isCurrent;
+
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2),
                 child: Row(
@@ -42,26 +48,25 @@ class NavigationStackDisplay extends StatelessWidget {
                     Text(
                       '${index + 1}. ',
                       style: TextStyle(
-                        color: isLast ? Colors.deepPurple : Colors.black54,
+                        color: showCurrent ? Colors.deepPurple : Colors.black54,
                       ),
                     ),
                     Text(
                       route.path,
                       style: TextStyle(
-                        fontWeight: isLast
+                        fontWeight: showCurrent
                             ? FontWeight.bold
                             : FontWeight.normal,
-                        color: isLast ? Colors.deepPurple : Colors.black87,
+                        color: showCurrent ? Colors.deepPurple : Colors.black87,
                       ),
                     ),
-                    if (isLast)
-                      const Text(
-                        ' (current)',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.deepPurple,
-                        ),
+                    Text(
+                      showCurrent ? ' (current)' : '',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.deepPurple,
                       ),
+                    ),
                   ],
                 ),
               );
