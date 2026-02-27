@@ -15,10 +15,10 @@ extension ContextExtension on BuildContext {
   /// [isCurrent]
   /// Returns true if the current [BuildContext] belongs to the top-most route in the navigation stack.
   bool get isCurrent {
-    final state = GoRouterState.of(this);
-    final router = GoRouter.of(this);
-    return state.path ==
-        router.routerDelegate.currentConfiguration.last.route.path;
+    final currentPageKey = GoRouterState.of(this).pageKey;
+    final topPageKey =
+        GoRouter.of(this).routerDelegate.currentConfiguration.last.pageKey;
+    return currentPageKey == topPageKey;
   }
 
   /// [pushAndRemoveUnt`il]
