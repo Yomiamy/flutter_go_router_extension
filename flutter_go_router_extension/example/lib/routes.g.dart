@@ -12,6 +12,7 @@ List<RouteBase> get $appRoutes => [
   $userPostRoute,
   $commentsRoute,
   $settingsRoute,
+  $tabsDemoShellRoute,
 ];
 
 RouteBase get $homeRoute =>
@@ -124,6 +125,67 @@ mixin $SettingsRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/settings');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $tabsDemoShellRoute => StatefulShellRouteData.$route(
+  factory: $TabsDemoShellRouteExtension._fromState,
+  branches: [
+    StatefulShellBranchData.$branch(
+      routes: [
+        GoRouteData.$route(path: '/tabs/tab1', factory: $Tab1Route._fromState),
+      ],
+    ),
+    StatefulShellBranchData.$branch(
+      routes: [
+        GoRouteData.$route(path: '/tabs/tab2', factory: $Tab2Route._fromState),
+      ],
+    ),
+  ],
+);
+
+extension $TabsDemoShellRouteExtension on TabsDemoShellRoute {
+  static TabsDemoShellRoute _fromState(GoRouterState state) =>
+      const TabsDemoShellRoute();
+}
+
+mixin $Tab1Route on GoRouteData {
+  static Tab1Route _fromState(GoRouterState state) => const Tab1Route();
+
+  @override
+  String get location => GoRouteData.$location('/tabs/tab1');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $Tab2Route on GoRouteData {
+  static Tab2Route _fromState(GoRouterState state) => const Tab2Route();
+
+  @override
+  String get location => GoRouteData.$location('/tabs/tab2');
 
   @override
   void go(BuildContext context) => context.go(location);
