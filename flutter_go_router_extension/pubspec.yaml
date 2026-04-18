@@ -1,6 +1,6 @@
 name: flutter_go_router_extension
 description: "A Flutter package that extends go_router with Android-style navigation behaviors, such as FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK."
-version: 1.3.1
+version: 1.4.0
 homepage: https://github.com/Yomiamy/flutter_go_router_extension
 repository: https://github.com/Yomiamy/flutter_go_router_extension
 issue_tracker: https://github.com/Yomiamy/flutter_go_router_extension/issues

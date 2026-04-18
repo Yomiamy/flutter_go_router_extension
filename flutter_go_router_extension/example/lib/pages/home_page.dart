@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:example/routes.dart';
 import '../widgets/shared_widgets.dart';
-
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -31,6 +31,12 @@ class HomePage extends StatelessWidget {
           description: 'context.push(\'/settings\')',
           onPressed: () => context.push('/settings'),
           color: Colors.orange,
+        ),
+        NavButton(
+          label: 'Go to Tabs Demo',
+          description: 'const Tab1Route().push(context)',
+          onPressed: () => const Tab1Route().push(context),
+          color: Colors.teal,
         ),
       ],
     );

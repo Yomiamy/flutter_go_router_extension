@@ -8,6 +8,7 @@ A Flutter package that extends [go_router](https://pub.dev/packages/go_router) w
 - **`pushAndRemoveUntil`**: Simulates Android's `FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK` behavior
 - **`popUntil`**: Pop routes until a specific route is reached, preserving the existing instance
 - **`popToRoot`**: Pop all routes until the root route is reached.
+- **`ShellTabVisibilityDetector`**: Provides visibility callbacks for tabs inside a `StatefulShellRoute`.
 - Supports dynamic route parameters (e.g., `/user/:id`)
 - Supports wildcard routes (e.g., `/files/*`)
 
@@ -17,10 +18,25 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_go_router_extension: ^1.3.1
+  flutter_go_router_extension: ^1.4.0
 ```
 
 ## Usage
+
+### ShellTabVisibilityDetector
+
+Tracks when nested tabs managed by a `go_router` `StatefulShellRoute` become visible or invisible.
+
+```dart
+// Wrap your tab's root widget
+ShellTabVisibilityDetector(
+  onVisible: () => print('Tab is visible'),
+  onInVisible: () => print('Tab is hidden'),
+  child: const MyTabPage(),
+)
+```
+
+Because `go_router` retains the state of `StatefulShellBranch` tabs in the background, standard `RouteObserver` fails to detect tab switching. This widget intelligently binds to Flutter's native `TickerMode` to provide completely accurate visibility events.
 
 ### isCurrent
 
