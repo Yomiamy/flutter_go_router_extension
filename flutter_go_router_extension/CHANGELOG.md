@@ -1,3 +1,8 @@
+## 1.4.0
+
+* Added `ShellTabVisibilityDetector` widget to detect when a route/branch inside a `StatefulShellRoute` becomes visible or invisible, replacing route observer restrictions that fail during preloaded `StatefulShellBranch` tabs.
+* Updated the example project to demonstrate `ShellTabVisibilityDetector` usage.
+
 ## 1.3.1
 
 * Updated License section in README.md to conform to standard open-source references.

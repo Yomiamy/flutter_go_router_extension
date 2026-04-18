@@ -12,15 +12,13 @@ class _Tab1PageState extends State<Tab1Page> {
   void _showToast(String message) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context)
-        ..clearSnackBars()
-        ..showSnackBar(
-          SnackBar(
-            content: Text(message),
-            duration: const Duration(milliseconds: 1000),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: const Duration(milliseconds: 500),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     });
   }
 
