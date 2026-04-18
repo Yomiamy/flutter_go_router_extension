@@ -28,7 +28,7 @@ class _ShellTabVisibilityDetectorState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final isActive = TickerMode.valuesOf(context).enabled;
+    final isActive = TickerMode.of(context);
     if (_wasActive == isActive) return;
     final previous = _wasActive;
     _wasActive = isActive;
